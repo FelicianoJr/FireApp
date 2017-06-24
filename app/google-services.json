@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "145588153350",
+    "firebase_url": "https://mabijoux-36902.firebaseio.com",
+    "project_id": "mabijoux-36902",
+    "storage_bucket": "mabijoux-36902.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145588153350:android:a4fc7f88c3a9d9e8",
+        "android_client_info": {
+          "package_name": "br.com.mabelli.bijoux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145588153350-n443koivoi0ko1nq2vv5nihu90d8bnp6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.mabelli.bijoux",
+            "certificate_hash": "EA3E9A6E75649BC49BDCF3338E47795AC5C7A537"
+          }
+        },
+        {
+          "client_id": "145588153350-o0i1e800pjfnolcrbfdknirpqfac9vh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi2FvKFAxo_J6XYjgf77nZOQBSQzLl4Gg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145588153350-o0i1e800pjfnolcrbfdknirpqfac9vh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

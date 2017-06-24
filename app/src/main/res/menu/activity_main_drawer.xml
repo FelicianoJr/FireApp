@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:title="Colares" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:title="Brincos" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:title="Pulseiras" />
+        <item
+            android:id="@+id/nav_manage"
+            android:title="Chocker" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>
