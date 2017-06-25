@@ -105,6 +105,7 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
             listener.getErraing();
 
         } else if (id == R.id.nav_slideshow) {
+            startActivity(new Intent(this,AuthActivity.class));
 
         } else if (id == R.id.nav_manage) {
 
