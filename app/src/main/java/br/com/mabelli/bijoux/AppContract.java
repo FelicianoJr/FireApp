@@ -17,7 +17,10 @@ public interface AppContract {
     interface ActionListener {
 
         void getnecklace();
+
         void getErraing();
+
+        void saveFavorite(Product product);
 
     }
 }

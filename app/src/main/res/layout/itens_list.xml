@@ -19,6 +19,7 @@
         android:background="#59000000">
 
 
+
         <TextView
             android:id="@+id/artist"
             android:layout_width="wrap_content"
@@ -29,6 +30,15 @@
             android:textSize="16sp"
             tools:text="Kodaline"
             android:textStyle="bold"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btnfavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_favorite_border"/>
 
         <TextView
             android:id="@+id/name"

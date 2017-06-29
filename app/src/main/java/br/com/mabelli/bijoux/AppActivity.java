@@ -9,10 +9,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 /**
@@ -69,7 +71,7 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
         recyclerView.setLayoutManager(st);
         recyclerView.setAdapter(adapter);
 
-        Intent intent = new Intent(this,FcmRegisterService.class);
+        Intent intent = new Intent(this, FcmRegisterService.class);
         startService(intent);
     }
 
@@ -89,6 +91,19 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
         }
     }
 
+    public final MyListener mylistener = new MyListener() {
+        @Override
+        public void onMyClick(Product product) {
+            listener.saveFavorite(product);
+            Toast.makeText(AppActivity.this, "OK", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     private int dpToPx(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
@@ -105,7 +120,7 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
             listener.getErraing();
 
         } else if (id == R.id.nav_slideshow) {
-            startActivity(new Intent(this,AuthActivity.class));
+            startActivity(new Intent(this, AuthActivity.class));
 
         } else if (id == R.id.nav_manage) {
 
@@ -145,15 +160,15 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
         public ItemRecycler onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(AppActivity.this);
             final View view = inflater.inflate(R.layout.itens_list, parent, false);
-            return new ItemRecycler(view);
+            return new ItemRecycler(view, mylistener);
         }
 
         @Override
         public void onBindViewHolder(final ItemRecycler holder, int position) {
             final Product product = mPostPaths.get(position);
-           //  holder.titleView.setText(product.getPrice());
-            holder.priceView.setText(product.getTitle());
-            Glide.with(AppActivity.this).load(product.getUrl()).crossFade().centerCrop().into(holder.imgView);
+            //  holder.titleView.setText(product.getPrice());
+            holder.priceView.setText(product.title);
+            Glide.with(AppActivity.this).load(product.url).crossFade().centerCrop().into(holder.imgView);
         }
 
         @Override
@@ -172,26 +187,43 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
             notifyItemRangeInserted(startIndex, mPostPaths.size());
         }
 
-        public class ItemRecycler extends RecyclerView.ViewHolder {
+        public Product getItem(int position) {
+            return mPostPaths.get(position);
+        }
+
+
+        public class ItemRecycler extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public final TextView titleView;
             public final ImageView imgView;
             public final TextView priceView;
+            public final AppCompatImageButton btn;
             //  View view;
+            private final MyListener myListener;
 
-            public ItemRecycler(View itemView) {
+            public ItemRecycler(View itemView, MyListener myListener) {
                 super(itemView);
                 // view = itemView;
+                this.myListener = myListener;
                 titleView = (TextView) itemView.findViewById(R.id.name);
                 imgView = (ImageView) itemView.findViewById(R.id.comment_photo);
                 priceView = (TextView) itemView.findViewById(R.id.artist);
+                btn = (AppCompatImageButton) itemView.findViewById(R.id.btnfavorite);
+                btn.setOnClickListener(this);
             }
 
-
-           /* public void ViewRecyclerAdapter(View.OnClickListener listener){
-                titleView.setOnClickListener(listener);
-            }*/
-
+            @Override
+            public void onClick(View v) {
+                int position = getAdapterPosition();
+                Log.i("TAG",String.valueOf(position));
+                Product product = getItem(position);
+                myListener.onMyClick(product);
+            }
         }
+
+    }
+
+    public interface MyListener {
+        void onMyClick(Product product);
     }
 }
