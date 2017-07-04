@@ -13,8 +13,8 @@ public class RecentProduct extends ProductControlllerFragment {
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
-        Query recentProduct = databaseReference.child("product/")
-                .orderByChild("type").equalTo("necklace");
+        Query recentProduct = databaseReference.child("product/");
+                //.orderByChild("type").equalTo("necklace");
         return recentProduct;
     }
 }

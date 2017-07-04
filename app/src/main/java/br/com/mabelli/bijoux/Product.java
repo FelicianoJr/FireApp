@@ -31,7 +31,4 @@ public class Product {
         this.sale = sale;
     }
 
-
-
-
 }

@@ -53,38 +53,39 @@ public class FavoriteProduct extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            refFavorite = mDatabase.child("favorite/").child(getUid());
 
-        refFavorite = mDatabase.child("favorite/").child(getUid());
+            mRecycler.setItemAnimator(new DefaultItemAnimator());
+            StaggeredGridLayoutManager st = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mRecycler.setLayoutManager(st);
 
-        mRecycler.setItemAnimator(new DefaultItemAnimator());
-        StaggeredGridLayoutManager st = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mRecycler.setLayoutManager(st);
+            fr = new FirebaseRecyclerAdapter<Boolean,
+                    ProductRecycler>(Boolean.class,
+                    R.layout.itens_list, ProductRecycler.class, refFavorite) {
+                @Override
+                protected void populateViewHolder(final ProductRecycler viewHolder, Boolean model, int position) {
+                    String key = this.getRef(position).getKey();
+                    mDatabase.child("product").child(key)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-        fr = new FirebaseRecyclerAdapter<Boolean,
-                ProductRecycler>(Boolean.class,
-                R.layout.itens_list, ProductRecycler.class, refFavorite) {
-            @Override
-            protected void populateViewHolder(final ProductRecycler viewHolder, Boolean model, int position) {
-                String key = this.getRef(position).getKey();
-                mDatabase.child("product").child(key)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                Product product = dataSnapshot.getValue(Product.class);
-                                viewHolder.priceView.setText(product.title);
-                                Glide.with(FavoriteProduct.this).load(product.url).crossFade().centerCrop().into(viewHolder.imgView);
-                            }
+                                    Product product = dataSnapshot.getValue(Product.class);
+                                    viewHolder.priceView.setText(product.title);
+                                    Glide.with(FavoriteProduct.this).load(product.url).crossFade().centerCrop().into(viewHolder.imgView);
+                                }
 
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
-            }
-        };
-        mRecycler.setAdapter(fr);
+                                }
+                            });
+                }
+            };
+            mRecycler.setAdapter(fr);
+        }
     }
 
     @Override

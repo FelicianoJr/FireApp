@@ -3,24 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:title="Colares" />
+            android:id="@+id/inic_dr"
+            android:title="Tela Inicial" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/fav_dr"
             android:title="Favoritos" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:title="Pulseiras" />
-        <item
-            android:id="@+id/nav_manage"
-            android:title="Chocker" />
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Communicação">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:title="Share" />
+                android:title="Avaliar App" />
         </menu>
     </item>
 

@@ -1,6 +1,8 @@
 package br.com.mabelli.bijoux;
 
-import com.google.firebase.database.FirebaseDatabase;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -9,10 +11,11 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
  */
 
 public class FcmRegisterService  extends FirebaseInstanceIdService{
+
     @Override
     public void onTokenRefresh() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String token = FirebaseInstanceId.getInstance().getToken();
-        FirebaseDatabase.getInstance().getReference().child("fcmkey/FcmToken")
-                .setValue(token);
+        sharedPreferences.edit().putString("token", token).apply();
     }
 }

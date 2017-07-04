@@ -14,7 +14,8 @@
     <string name="hint_password">Password</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
     <string name="aplicativo_web">145588153350-o0i1e800pjfnolcrbfdknirpqfac9vh9.apps.googleusercontent.com</string>
-
+    <string name="facebook_app_id">1815937675308879</string>
+    <string name="fb_login_protocol_scheme">fb1815937675308879</string>
     <string name="top1">Novidades</string>
     <string name="top2">Categoria</string>
     <string name="top3">Promoção</string>
