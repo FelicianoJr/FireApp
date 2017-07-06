@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -68,7 +69,9 @@ public abstract class ProductControlllerFragment extends Fragment {
             protected void populateViewHolder(ProductRecycler viewHolder, final Product product, int position) {
                 product.uid = getRef(position).getKey();
                 viewHolder.priceView.setText(product.title);
-                Glide.with(ProductControlllerFragment.this).load(product.url).crossFade().centerCrop().into(viewHolder.imgView);
+                Glide.with(ProductControlllerFragment.this)
+                        .load(product.url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop().into(viewHolder.imgView);
                 viewHolder.btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

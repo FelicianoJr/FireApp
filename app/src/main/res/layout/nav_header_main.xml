@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:background="@drawable/side_nav_bar"
+    android:backgroundTint="@color/colorAccent"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    android:backgroundTint="@color/colorAccent"
-    >
+    android:paddingTop="16dp">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/user_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        android:layout_gravity="center|left"
+        />
 
     <TextView
+        android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
-        android:text="Mabelli Acessórios"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/user_email"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="mabelli" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -58,7 +58,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton  = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("email");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

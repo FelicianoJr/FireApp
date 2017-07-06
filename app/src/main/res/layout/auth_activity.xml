@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:weightSum="4">
 
-
         <ImageView
             android:id="@+id/google_icon"
             android:contentDescription="@string/desc_firebase_lockup"

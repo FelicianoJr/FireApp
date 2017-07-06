@@ -14,6 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 /**
@@ -23,6 +30,9 @@ import android.view.MenuItem;
 public class AppActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Fragment fragment;
+    private FirebaseAuth firebaseAuth;
+    private TextView txtEmail;
+    private ImageView photo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +50,9 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View view = navigationView.getHeaderView(0);
+        txtEmail = (TextView) view.findViewById(R.id.user_email);
+        photo = (ImageView) view.findViewById(R.id.user_photo);
 
         fragment = new RecentProduct();
         if (fragment != null) {
@@ -47,6 +60,16 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
             ft.replace(R.id.frame_recycler, fragment);
             ft.commit();
         }
+
+        firebaseAuth = FirebaseAuth.getInstance();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        updateHeader(currentUser);
     }
 
     @Override
@@ -86,5 +109,15 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    private void updateHeader(FirebaseUser user) {
+        if (user != null) {
+            Glide.with(this).load(user.getPhotoUrl())
+                    .bitmapTransform(new GlideCircle(getApplicationContext())).into(photo);
+            txtEmail.setText(user.getEmail());
+        }
+    }
+
 
 }
