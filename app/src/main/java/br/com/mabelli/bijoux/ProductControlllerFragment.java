@@ -2,11 +2,15 @@ package br.com.mabelli.bijoux;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -35,6 +39,7 @@ public abstract class ProductControlllerFragment extends Fragment {
 
     private FirebaseRecyclerAdapter<Product, ProductRecycler> mAdapter;
     private RecyclerView mRecycler;
+    public static final String TAG = ProductControlllerFragment.class.getSimpleName();
 
     public ProductControlllerFragment() {
     }
@@ -66,21 +71,53 @@ public abstract class ProductControlllerFragment extends Fragment {
         mAdapter = new FirebaseRecyclerAdapter<Product, ProductRecycler>(Product.class,
                 R.layout.itens_list, ProductRecycler.class, query) {
             @Override
-            protected void populateViewHolder(ProductRecycler viewHolder, final Product product, int position) {
+            protected void populateViewHolder(final ProductRecycler viewHolder,
+                                              final Product product, int position) {
                 product.uid = getRef(position).getKey();
                 viewHolder.priceView.setText(product.title);
                 Glide.with(ProductControlllerFragment.this)
                         .load(product.url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop().into(viewHolder.imgView);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    //textView.setTransitionName("transtext" + position);
+                    viewHolder.imgView.setTransitionName("transition" + position);
+                }
+
                 viewHolder.btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         saveFavorite(product.uid);
                     }
                 });
+                viewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Fragment lookProduct = LookProduct
+                                .newInstance(ViewCompat.getTransitionName(viewHolder.imgView));
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.popBackStack(TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        fragmentManager
+                                .beginTransaction()
+                                .addSharedElement(viewHolder.imgView
+                                        , ViewCompat.getTransitionName(viewHolder.imgView))
+                                .addToBackStack(TAG)
+                                .replace(android.R.id.content, lookProduct)
+                                .commit();
+
+                    }
+                });
             }
         };
         mRecycler.setAdapter(mAdapter);
+    }
+
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_recycler, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

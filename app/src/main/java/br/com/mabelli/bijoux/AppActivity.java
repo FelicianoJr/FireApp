@@ -86,6 +86,10 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
         } else {
             super.onBackPressed();
         }
+        /*getSupportFragmentManager().popBackStack();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        }*/
     }
 
     @Override
@@ -118,6 +122,5 @@ public class AppActivity extends AppCompatActivity implements NavigationView.OnN
             txtEmail.setText(user.getEmail());
         }
     }
-
 
 }

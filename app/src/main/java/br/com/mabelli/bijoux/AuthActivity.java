@@ -23,6 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -33,6 +35,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Arrays;
 
 /**
  * Created by feliciano on 24/06/17.
@@ -57,8 +61,8 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton  = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList("email"));
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -74,7 +78,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                Log.i("TAG",error.getMessage());
+                Log.i("TAG", error.getMessage());
 
             }
         });
@@ -96,7 +100,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode,resultCode,data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -143,18 +147,30 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void facebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken() );
+        Toast.makeText(AuthActivity.this, token.getToken(),
+                Toast.LENGTH_SHORT).show();
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithCredential", task.getException());
-                    Toast.makeText(AuthActivity.this, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show();
+
+                    firebaseAuth.getCurrentUser().linkWithCredential(credential)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(AuthActivity.this, "LookProduct linkkada.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
         });
     }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
@@ -178,8 +194,25 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
+        }else if (i == R.id.sign_out_button) {
+            signOut();
         }
     }
+
+    private void signOut() {
+        // Firebase sign out
+        firebaseAuth.signOut();
+
+        // Google sign out
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        Toast.makeText(AuthActivity.this, "saiu.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
